@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Animal struct {
 	Id              string
@@ -13,5 +15,7 @@ type Animal struct {
 	Weight          float64
 	ReservationDate time.Time
 	IsReserved      bool
+	ISAdopted       bool
+	Image           string
 	Location        string
 }

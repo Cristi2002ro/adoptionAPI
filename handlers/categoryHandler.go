@@ -17,12 +17,12 @@ func CategoriesHandler(writer http.ResponseWriter, request *http.Request) {
 
 func getAllCategoriesHandler(writer http.ResponseWriter, request *http.Request) {
 	response, _ := dal.GetCategories()
-	util.Setup200Response(writer)
+	util.Setup200Response(writer, request)
 	json.NewEncoder(writer).Encode(response)
 }
 
 func getCategoryByIdHandler(writer http.ResponseWriter, request *http.Request) {
 	response, _ := dal.GetCategoryById(request)
-	util.Setup200Response(writer)
+	util.Setup200Response(writer, request)
 	json.NewEncoder(writer).Encode(response)
 }
