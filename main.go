@@ -9,7 +9,7 @@ import (
 const BaseURL = "/api"
 
 func main() {
-	http.HandleFunc(BaseURL+"/categories", handlers.CategoryHandler)
+	http.HandleFunc(BaseURL+"/categories", handlers.CategoriesHandler)
 	http.HandleFunc(BaseURL+"/animal", handlers.HandleAnimalById)
 
 	err := http.ListenAndServe(":8080", nil)

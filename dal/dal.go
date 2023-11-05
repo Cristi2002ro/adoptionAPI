@@ -16,7 +16,7 @@ const (
 
 var db *sql.DB
 
-func init() {
+func init() { //function called init will always be executed by go
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
@@ -30,7 +30,7 @@ func init() {
 		panic(err)
 	}
 
-	fmt.Println("Conexiune reușită la baza de date!")
+	fmt.Println("Successfully connected to database")
 }
 
 func GetDB() *sql.DB {

@@ -2,20 +2,27 @@ package handlers
 
 import (
 	"adoptionAPI/dal"
+	"adoptionAPI/util"
 	"encoding/json"
 	"net/http"
 )
 
-func setupResponse(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+func CategoriesHandler(writer http.ResponseWriter, request *http.Request) {
+	if request.URL.Query().Get("id") != "" {
+		getCategoryByIdHandler(writer, request)
+	} else {
+		getAllCategoriesHandler(writer, request)
+	}
 }
 
-func CategoryHandler(writer http.ResponseWriter, r *http.Request) {
+func getAllCategoriesHandler(writer http.ResponseWriter, request *http.Request) {
 	response, _ := dal.GetCategories()
-	setupResponse(writer)
-	err := json.NewEncoder(writer).Encode(response)
-	if err != nil {
-		return
-	}
+	util.Setup200Response(writer)
+	json.NewEncoder(writer).Encode(response)
+}
+
+func getCategoryByIdHandler(writer http.ResponseWriter, request *http.Request) {
+	response, _ := dal.GetCategoryById(request)
+	util.Setup200Response(writer)
+	json.NewEncoder(writer).Encode(response)
 }
