@@ -1,7 +1,7 @@
 package model
 
 type Category struct {
-	Id    string
-	Value string
-	Image string
+	Id    string `json:"id"`
+	Value string `json:"value"`
+	Image string `json:"image"`
 }

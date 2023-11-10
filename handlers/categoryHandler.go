@@ -8,6 +8,10 @@ import (
 )
 
 func CategoriesHandler(writer http.ResponseWriter, request *http.Request) {
+	if request.Method != http.MethodGet {
+		http.Error(writer, "GET method only available for this endpoint", http.StatusMethodNotAllowed)
+		return
+	}
 	if request.URL.Query().Get("id") != "" {
 		getCategoryByIdHandler(writer, request)
 	} else {

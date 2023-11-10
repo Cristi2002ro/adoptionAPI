@@ -1,20 +1,34 @@
 package handlers
 
 import (
+	"adoptionAPI/dal"
 	"adoptionAPI/model"
 	"adoptionAPI/util"
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
-func HandleAnimalById(writer http.ResponseWriter, r *http.Request) {
-	animalId := r.URL.Query().Get("id")
-	log.Println("AnimalId = ", animalId)
-	response := model.Animal{Id: "1", CategoryId: "1", Name: "Nero"}
-	util.Setup200Response(writer, r)
-	err := json.NewEncoder(writer).Encode(response)
-	if err != nil {
+func HandleAllAnimals(writer http.ResponseWriter, request *http.Request) {
+	if request.Method != http.MethodGet {
+		http.Error(writer, "GET method only available for this endpoint", http.StatusMethodNotAllowed)
 		return
 	}
+	response, _ := dal.GetAnimals()
+	util.Setup200Response(writer, request)
+	json.NewEncoder(writer).Encode(response)
+}
+
+func HandleAddAnimal(writer http.ResponseWriter, request *http.Request) {
+	if request.Method != http.MethodPost {
+		http.Error(writer, "POST method only available for this endpoint", http.StatusMethodNotAllowed)
+		return
+	}
+	var newAnimal model.Animal
+	err := json.NewDecoder(request.Body).Decode(&newAnimal)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+	dal.AddAnimal(newAnimal, writer)
+	util.Setup200Response(writer, request)
 }
