@@ -9,7 +9,7 @@ import (
 )
 
 func HandleAllAnimals(writer http.ResponseWriter, request *http.Request) {
-	if request.Method != http.MethodGet {
+	if request.Method != http.MethodGet && request.Method != http.MethodOptions {
 		http.Error(writer, "GET method only available for this endpoint", http.StatusMethodNotAllowed)
 		return
 	}
@@ -19,7 +19,7 @@ func HandleAllAnimals(writer http.ResponseWriter, request *http.Request) {
 }
 
 func HandleAddAnimal(writer http.ResponseWriter, request *http.Request) {
-	if request.Method != http.MethodPost {
+	if request.Method != http.MethodPost && request.Method != http.MethodOptions {
 		http.Error(writer, "POST method only available for this endpoint", http.StatusMethodNotAllowed)
 		return
 	}

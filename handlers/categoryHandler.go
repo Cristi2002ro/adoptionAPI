@@ -8,7 +8,7 @@ import (
 )
 
 func CategoriesHandler(writer http.ResponseWriter, request *http.Request) {
-	if request.Method != http.MethodGet {
+	if request.Method != http.MethodGet && request.Method != http.MethodOptions {
 		http.Error(writer, "GET method only available for this endpoint", http.StatusMethodNotAllowed)
 		return
 	}
