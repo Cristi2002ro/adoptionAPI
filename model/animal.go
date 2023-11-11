@@ -9,7 +9,6 @@ type Animal struct {
 	Id              uuid.UUID  `json:"id"`
 	CategoryId      string     `json:"categoryId"`
 	Name            *string    `json:"name"`
-	ShelterId       *string    `json:"shelterId"`
 	Age             *int       `json:"age"`
 	Species         *string    `json:"species"`
 	Gender          *string    `json:"gender"`
