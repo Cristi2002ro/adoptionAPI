@@ -8,12 +8,32 @@ import (
 	"net/http"
 )
 
-func HandleAllAnimals(writer http.ResponseWriter, request *http.Request) {
+var acceptedParams = [...]string{"id", "categoryId", "age", "species", "gender", "location"}
+
+func HandleGetAnimals(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet && request.Method != http.MethodOptions {
 		http.Error(writer, "GET method only available for this endpoint", http.StatusMethodNotAllowed)
 		return
 	}
-	response, _ := dal.GetAnimals()
+	params := request.URL.Query()
+	whereClause := false
+	if len(params) != 0 {
+		whereClause = true
+		for key := range params {
+			isValid := false
+			for i := range acceptedParams {
+				if key == acceptedParams[i] {
+					isValid = true
+				}
+			}
+			if !isValid {
+				http.Error(writer, "Unaccepted query params", http.StatusBadRequest)
+				return
+			}
+		}
+	}
+
+	response, _ := dal.GetAnimals(params, whereClause)
 	util.Setup200Response(writer, request)
 	json.NewEncoder(writer).Encode(response)
 }

@@ -2,15 +2,23 @@ package dal
 
 import (
 	"adoptionAPI/model"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
 	"net/http"
 )
 
-func GetAnimals() ([]model.Animal, error) {
-	rows, _ := db.Query("SELECT * FROM animals")
-	defer rows.Close()
+func GetAnimals(params map[string][]string, whereClause bool) ([]model.Animal, error) {
+	query := buildQuery(params, whereClause)
+	fmt.Println("Query:", query)
+	rows, _ := db.Query(query)
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+
+		}
+	}(rows)
 
 	var animals []model.Animal
 	for rows.Next() {
@@ -24,6 +32,18 @@ func GetAnimals() ([]model.Animal, error) {
 		animals = append(animals, animal)
 	}
 	return animals, nil
+}
+
+func buildQuery(params map[string][]string, whereClause bool) string {
+	baseQuery := "SELECT * FROM animals"
+	if whereClause {
+		baseQuery += " where "
+		for key, value := range params {
+			baseQuery += key + " = '" + value[0] + "' and "
+		}
+		baseQuery = baseQuery[0 : len(baseQuery)-5]
+	}
+	return baseQuery
 }
 
 func AddAnimal(animal model.Animal, w http.ResponseWriter) {
