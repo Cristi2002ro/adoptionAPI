@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-var acceptedParams = [...]string{"id", "categoryId", "age", "species", "gender", "location"}
+var acceptedParams = [...]string{"id", "categoryId", "age", "species", "gender", "isAdopted", "isReserved", "location"}
 
 func HandleGetAnimals(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet && request.Method != http.MethodOptions {
@@ -17,21 +17,7 @@ func HandleGetAnimals(writer http.ResponseWriter, request *http.Request) {
 	}
 	params := request.URL.Query()
 	whereClause := false
-	if len(params) != 0 {
-		whereClause = true
-		for key := range params {
-			isValid := false
-			for i := range acceptedParams {
-				if key == acceptedParams[i] {
-					isValid = true
-				}
-			}
-			if !isValid {
-				http.Error(writer, "Unaccepted query params", http.StatusBadRequest)
-				return
-			}
-		}
-	}
+	checkParams(params, &whereClause, writer)
 
 	response, _ := dal.GetAnimals(params, whereClause)
 	util.Setup200Response(writer, request)
@@ -51,4 +37,22 @@ func HandleAddAnimal(writer http.ResponseWriter, request *http.Request) {
 	}
 	dal.AddAnimal(newAnimal, writer)
 	util.Setup200Response(writer, request)
+}
+
+func checkParams(params map[string][]string, whereClause *bool, writer http.ResponseWriter) {
+	if len(params) != 0 {
+		*whereClause = true
+		for key := range params {
+			isValid := false
+			for i := range acceptedParams {
+				if key == acceptedParams[i] {
+					isValid = true
+				}
+			}
+			if !isValid {
+				http.Error(writer, "Unaccepted query params", http.StatusBadRequest)
+				return
+			}
+		}
+	}
 }

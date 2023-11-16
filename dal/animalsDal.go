@@ -34,6 +34,17 @@ func GetAnimals(params map[string][]string, whereClause bool) ([]model.Animal, e
 	return animals, nil
 }
 
+func AddAnimal(animal model.Animal, w http.ResponseWriter) {
+	animalId, _ := uuid.NewUUID()
+	_, err := db.Exec("INSERT INTO animals (id, categoryId, name, age, species, gender, weight, reservationDate, isReserved, isAdopted, image, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+		animalId, animal.CategoryId, animal.Name, animal.Age, animal.Species, animal.Gender, animal.Weight, animal.ReservationDate, animal.IsReserved, animal.IsAdopted, animal.Image, animal.Location)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	json.NewEncoder(w).Encode(`Successfully inserted`)
+}
+
 func buildQuery(params map[string][]string, whereClause bool) string {
 	baseQuery := "SELECT * FROM animals"
 	if whereClause {
@@ -44,15 +55,4 @@ func buildQuery(params map[string][]string, whereClause bool) string {
 		baseQuery = baseQuery[0 : len(baseQuery)-5]
 	}
 	return baseQuery
-}
-
-func AddAnimal(animal model.Animal, w http.ResponseWriter) {
-	animalId, _ := uuid.NewUUID()
-	_, err := db.Exec("INSERT INTO animals (id, categoryId, name, age, species, gender, weight, reservationDate, isReserved, isAdopted, image, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
-		animalId, animal.CategoryId, animal.Name, animal.Age, animal.Species, animal.Gender, animal.Weight, animal.ReservationDate, animal.IsReserved, animal.IsAdopted, animal.Image, animal.Location)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	json.NewEncoder(w).Encode(`Successfully inserted`)
 }
