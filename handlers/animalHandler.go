@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-var acceptedParams = [...]string{"id", "categoryId", "age", "species", "gender", "isAdopted", "isReserved", "location"}
+var acceptedParams = [...]string{"id", "categoryId", "breedId", "age", "gender", "adopted", "reserved", "userId", "location"}
 
 func HandleGetAnimals(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet && request.Method != http.MethodOptions {
