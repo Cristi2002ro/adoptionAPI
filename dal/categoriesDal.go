@@ -12,7 +12,7 @@ func GetCategories() ([]model.Category, error) {
 	var categories []model.Category
 	for rows.Next() {
 		var category model.Category
-		rows.Scan(&category.Id, &category.Value, &category.Image)
+		rows.Scan(&category.Id)
 		categories = append(categories, category)
 	}
 	return categories, nil
@@ -26,7 +26,7 @@ func GetCategoryById(request *http.Request) (model.Category, error) {
 
 	for rows.Next() {
 		var category model.Category
-		rows.Scan(&category.Id, &category.Value, &category.Image)
+		rows.Scan(&category.Id)
 		return category, nil
 	}
 
