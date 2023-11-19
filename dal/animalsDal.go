@@ -51,7 +51,16 @@ func buildQuery(params map[string][]string, whereClause bool) string {
 	if whereClause {
 		baseQuery += " where "
 		for key, value := range params {
-			baseQuery += key + " = '" + value[0] + "' and "
+			if key != "startAge" && key != "endAge" {
+				baseQuery += key + " = '" + value[0] + "' and "
+			} else {
+				switch key {
+				case "startAge":
+					baseQuery += "age >= " + value[0] + " and "
+				case "endAge":
+					baseQuery += "age <= " + value[0] + " and "
+				}
+			}
 		}
 		baseQuery = baseQuery[0 : len(baseQuery)-5]
 	}

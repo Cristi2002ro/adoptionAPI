@@ -8,7 +8,8 @@ import (
 	"net/http"
 )
 
-var acceptedParams = [...]string{"id", "categoryId", "breedId", "age", "gender", "adopted", "reserved", "userId", "location"}
+var acceptedParams = [...]string{"id", "categoryId", "breedId", "age", "gender", "adopted", "reserved", "userId",
+	"location", "startAge", "endAge"}
 
 func HandleGetAnimals(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet && request.Method != http.MethodOptions {
@@ -21,6 +22,9 @@ func HandleGetAnimals(writer http.ResponseWriter, request *http.Request) {
 
 	response, _ := dal.GetAnimals(params, whereClause)
 	util.Setup200Response(writer, request)
+	if response == nil {
+		response = make([]model.Animal, 0)
+	}
 	json.NewEncoder(writer).Encode(response)
 }
 
