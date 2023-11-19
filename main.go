@@ -12,6 +12,7 @@ func main() {
 	http.HandleFunc(BaseURL+"/categories", handlers.CategoriesHandler)
 	http.HandleFunc(BaseURL+"/animals", handlers.HandleGetAnimals)
 	http.HandleFunc(BaseURL+"/animals/add", handlers.HandleAddAnimal)
+	http.HandleFunc(BaseURL+"/reserve/", handlers.HandleReserveAnimal)
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {

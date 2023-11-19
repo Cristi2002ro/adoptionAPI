@@ -6,6 +6,7 @@ import (
 	"adoptionAPI/util"
 	"encoding/json"
 	"net/http"
+	"strings"
 )
 
 var acceptedParams = [...]string{"id", "categoryId", "breedId", "age", "gender", "adopted", "reserved", "userId",
@@ -40,6 +41,23 @@ func HandleAddAnimal(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	dal.AddAnimal(newAnimal, writer)
+	util.Setup200Response(writer, request)
+}
+
+func HandleReserveAnimal(writer http.ResponseWriter, request *http.Request) {
+	if request.Method != http.MethodPut && request.Method != http.MethodOptions {
+		http.Error(writer, "POST method only available for this endpoint", http.StatusMethodNotAllowed)
+		return
+	}
+	var userId, animalId string
+	pathParams := strings.TrimPrefix(request.URL.Path, "/api/reserve/")
+	parameters := strings.Split(pathParams, "/")
+	for range parameters {
+		userId = parameters[0]
+		animalId = parameters[1]
+	}
+
+	dal.ReserveAnimal(userId, animalId, writer)
 	util.Setup200Response(writer, request)
 }
 

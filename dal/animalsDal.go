@@ -47,6 +47,16 @@ func AddAnimal(animal model.Animal, w http.ResponseWriter) {
 	json.NewEncoder(w).Encode(`Successfully inserted`)
 }
 
+func ReserveAnimal(userId, animalId string, w http.ResponseWriter) {
+	fmt.Println("user:", userId, "animal:", animalId)
+	_, err := db.Exec("UPDATE animals set userId=$1, reserved =true where id=$2", userId, animalId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	json.NewEncoder(w).Encode(`Reservation succesfully created`)
+}
+
 func buildQuery(params map[string][]string, whereClause bool) string {
 	baseQuery := "SELECT * FROM animals"
 	if whereClause {
