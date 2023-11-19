@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"net/http"
+	"strings"
 )
 
 func GetAnimals(params map[string][]string, whereClause bool) ([]model.Animal, error) {
@@ -51,7 +52,7 @@ func buildQuery(params map[string][]string, whereClause bool) string {
 	if whereClause {
 		baseQuery += " where "
 		for key, value := range params {
-			if key != "startAge" && key != "endAge" {
+			if key != "startAge" && key != "endAge" && !strings.Contains(value[0], ",") {
 				baseQuery += key + " = '" + value[0] + "' and "
 			} else {
 				switch key {
@@ -59,6 +60,12 @@ func buildQuery(params map[string][]string, whereClause bool) string {
 					baseQuery += "age >= " + value[0] + " and "
 				case "endAge":
 					baseQuery += "age <= " + value[0] + " and "
+				case "categoryId":
+					categories := strings.Split(value[0], ",")
+					for i := range categories {
+						baseQuery += "categoryId = '" + categories[i] + "' or "
+					}
+					baseQuery = baseQuery[0:len(baseQuery)-4] + " and "
 				}
 			}
 		}
