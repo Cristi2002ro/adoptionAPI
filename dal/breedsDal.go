@@ -6,7 +6,7 @@ import (
 )
 
 func GetBreedsForCategory(categoryId string) ([]model.Breed, error) {
-	query := fmt.Sprintf("select * from breeds where categoryId='%s'", categoryId)
+	query := fmt.Sprintf("select distinct breedId from animals where categoryId='%s'", categoryId)
 	fmt.Println(query)
 	rows, _ := db.Query(query)
 	defer rows.Close()
@@ -14,7 +14,7 @@ func GetBreedsForCategory(categoryId string) ([]model.Breed, error) {
 	var breeds []model.Breed
 	for rows.Next() {
 		var breed model.Breed
-		rows.Scan(&breed.Id, &breed.CategoryId, &breed.Name)
+		rows.Scan(&breed.BreedId)
 		breeds = append(breeds, breed)
 	}
 	return breeds, nil

@@ -76,6 +76,12 @@ func buildQuery(params map[string][]string, whereClause bool) string {
 						baseQuery += "categoryId = '" + categories[i] + "' or "
 					}
 					baseQuery = baseQuery[0:len(baseQuery)-4] + " and "
+				case "breedId":
+					breeds := strings.Split(value[0], ",")
+					for i := range breeds {
+						baseQuery += "breedId = '" + breeds[i] + "' or "
+					}
+					baseQuery = baseQuery[0:len(baseQuery)-4] + " and "
 				}
 			}
 		}
