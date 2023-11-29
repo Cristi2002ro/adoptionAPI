@@ -3,6 +3,7 @@ package main
 import (
 	"adoptionAPI/dal"
 	"adoptionAPI/handlers"
+	"fmt"
 	"net/http"
 )
 
@@ -23,6 +24,7 @@ func main() {
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
+		fmt.Println("application failed to serve")
 		return
 	}
 	defer dal.GetDB().Close()
