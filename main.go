@@ -23,7 +23,7 @@ func main() {
 	http.HandleFunc(BaseURL+"/favorites", handlers.HandleGetFavorites)
 	http.HandleFunc(BaseURL+"/favorites/delete", handlers.HandleDeleteFavorite)
 
-	port := envPortOr("300git rm --cached")
+	port := envPortOr("3000")
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		fmt.Println("application failed to serve")
