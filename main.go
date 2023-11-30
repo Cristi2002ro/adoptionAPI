@@ -5,7 +5,6 @@ import (
 	"adoptionAPI/handlers"
 	"fmt"
 	"net/http"
-	"os"
 )
 
 const BaseURL = "/api"
@@ -22,21 +21,11 @@ func main() {
 	http.HandleFunc(BaseURL+"/favorites/add", handlers.HandlePostFavorite)
 	http.HandleFunc(BaseURL+"/favorites", handlers.HandleGetFavorites)
 	http.HandleFunc(BaseURL+"/favorites/delete", handlers.HandleDeleteFavorite)
-	port := envPortOr("3000")
 
-	err := http.ListenAndServe(port, nil)
+	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
 		fmt.Println("application failed to serve")
 		return
 	}
 	defer dal.GetDB().Close()
-}
-
-func envPortOr(port string) string {
-	// If `PORT` variable in environment exists, return it
-	if envPort := os.Getenv("PORT"); envPort != "" {
-		return ":" + envPort
-	}
-	// Otherwise, return the value of `port` variable from function argument
-	return ":" + port
 }

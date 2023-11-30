@@ -3,21 +3,23 @@ package dal
 import (
 	"database/sql"
 	"fmt"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-)
-
-const (
-	host     = "roundhouse.proxy.rlwy.net"
-	port     = 27626
-	user     = "postgres"
-	password = "CB3d2-f-a-aCb-GBdBa154cefe66c-C3"
-	dbname   = "railway"
+	"os"
 )
 
 var db *sql.DB
 
 func init() { //function called init will always be executed by go
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+	godotenv.Load()
+	var (
+		host     = os.Getenv("DB_HOST")
+		port     = os.Getenv("DB_PORT")
+		user     = os.Getenv("DB_USER")
+		password = os.Getenv("DB_PASSWORD")
+		dbname   = os.Getenv("DB_NAME")
+	)
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 	var err error
