@@ -2,6 +2,7 @@ package dal
 
 import (
 	"adoptionAPI/model"
+	"database/sql"
 	"encoding/json"
 	"github.com/google/uuid"
 	"net/http"
@@ -18,8 +19,17 @@ func PostFavorite(favorite model.Favorite, writer http.ResponseWriter) {
 	json.NewEncoder(writer).Encode(`Successfully inserted`)
 }
 
-func GetFavoritesByUid(userID string) []model.Animal {
-	result, _ := db.Query("SELECT animals.* FROM animals JOIN favorites ON animals.id = favorites.animalId WHERE favorites.userId = $1;", userID)
+func GetFavoritesByUid(userID string, animalId string) []model.Animal {
+	var result *sql.Rows
+
+	if animalId == "" {
+		query := "SELECT animals.* FROM animals JOIN favorites ON animals.id = favorites.animalId WHERE favorites.userId = $1;"
+		result, _ = db.Query(query, userID)
+	} else {
+		query := "SELECT animals.* FROM animals JOIN favorites ON animals.id = favorites.animalId WHERE favorites.userId = $1 AND favorites.animalId=$2;"
+		result, _ = db.Query(query, userID, animalId)
+	}
+
 	var animals []model.Animal
 	for result.Next() {
 		var animal model.Animal

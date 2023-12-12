@@ -14,7 +14,12 @@ func HandleGetFavorites(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	userID := request.URL.Query().Get("userId")
-	favoritesList := dal.GetFavoritesByUid(userID)
+	animalId := request.URL.Query().Get("animalId")
+	if userID == "" {
+		http.Error(writer, "No userId provided", http.StatusBadRequest)
+		return
+	}
+	favoritesList := dal.GetFavoritesByUid(userID, animalId)
 	if favoritesList == nil {
 		favoritesList = make([]model.Animal, 0)
 	}
