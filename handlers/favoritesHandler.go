@@ -28,6 +28,7 @@ func HandleGetFavorites(writer http.ResponseWriter, request *http.Request) {
 }
 
 func HandlePostFavorite(writer http.ResponseWriter, request *http.Request) {
+	util.Setup200Response(writer, request)
 	if request.Method != http.MethodPost && request.Method != http.MethodOptions {
 		http.Error(writer, "POST method only available for this endpoint", http.StatusMethodNotAllowed)
 		return
@@ -43,8 +44,9 @@ func HandlePostFavorite(writer http.ResponseWriter, request *http.Request) {
 }
 
 func HandleDeleteFavorite(writer http.ResponseWriter, request *http.Request) {
+	util.Setup200Response(writer, request)
 	if request.Method != http.MethodDelete && request.Method != http.MethodOptions {
-		http.Error(writer, "POST method only available for this endpoint", http.StatusMethodNotAllowed)
+		http.Error(writer, "Delete method only available for this endpoint", http.StatusMethodNotAllowed)
 		return
 	}
 	var favorite model.Favorite

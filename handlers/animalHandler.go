@@ -45,6 +45,7 @@ func HandleAddAnimal(writer http.ResponseWriter, request *http.Request) {
 }
 
 func HandleReserveAnimal(writer http.ResponseWriter, request *http.Request) {
+	util.Setup200Response(writer, request)
 	if request.Method != http.MethodPut && request.Method != http.MethodOptions {
 		http.Error(writer, "POST method only available for this endpoint", http.StatusMethodNotAllowed)
 		return
